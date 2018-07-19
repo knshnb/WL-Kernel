@@ -38,6 +38,3 @@ class PlantedClique(RandomGraph):
         for i in range(k):
             for j in range(i + 1, k):
                 self.addEdge(i, j)
-
-if __name__ == '__main__':
-    pass
