@@ -19,6 +19,24 @@ class Graph:
             for j in range(self.n):
                 if self.A[i, j]:
                     self.l[0][i] += 1
+
+    def setLabelWithReachable(self, x):
+        reachables = np.zeros((self.n, self.n), dtype=np.int)
+        visited = [False for _ in range(self.n)]
+        def dfs(start, now, xx):
+            if xx == 0:
+                return
+            visited[now] = True
+            for i in range(self.n):
+                if self.A[now, i] and (not visited[i]):
+                    reachables[start][i] += 1
+                    dfs(start, i, xx-1)
+            visited[now] = False
+        for i in range(self.n):
+            dfs(i, i, x)
+        print(reachables)
+        reachable_counts = np.array([np.sum(reachable) for reachable in reachables])
+        print(reachable_counts)
                     
     def adjacencyList(self, i):
         return np.arange(self.A[i].size)[self.A[i]]

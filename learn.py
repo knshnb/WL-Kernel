@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import WL_kernel
 import graph
+import sys
 
 def learn(graphs, H):
     for kernel in WL_kernel.WLKernel(graphs, H):
@@ -36,17 +37,29 @@ if __name__ == '__main__':
     for beta in betas:
         with open('beta{}_num_500.pickle'.format(beta), 'rb') as f:
             graphs = pickle.load(f)
+        # for g in graphs:
+        for g in graphs[:10]:
+            g.setLabelWithReachable(2)
+        sys.exit()
+        y_none = list(learn(graphs, H_MAX))
+        graphs = []
+        plt.plot(Hs, y_none, marker="o", label="None")
 
-        graphs_nodeDegree = copy.deepcopy(graphs)
+        with open('beta{}_num_500.pickle'.format(beta), 'rb') as f:
+            graphs = pickle.load(f)
+        y_none = list(learn(graphs, H_MAX))
+        graphs = []
+        plt.plot(Hs, y_none, marker="o", label="None")
+
+        with open('beta{}_num_500.pickle'.format(beta), 'rb') as f:
+            graphs_nodeDegree = pickle.load(f)
         for g in graphs_nodeDegree:
             g.setLabelWithDegree()
-
         y_nodeDegree = list(learn(graphs_nodeDegree, H_MAX))
-        y_none = list(learn(graphs, H_MAX))
+
         plt.gca().get_xaxis().set_major_locator(ticker.MaxNLocator(integer=True))
         plt.ylim([0, 1])
         plt.plot(Hs, y_nodeDegree, marker="o", label="Degree")
-        plt.plot(Hs, y_none, marker="o", label="None")
         plt.legend()
         plt.title("beta = {}".format(beta))
         plt.xlabel("Iterations")

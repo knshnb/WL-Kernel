@@ -27,8 +27,7 @@ def WLKernel(graphs, H):
     yield kernel[:, np.any(kernel != 0, axis=0)]
 
     for h in range(1, H):
-        if h % (H / 10) == 0:
-            print("iteration: {} / {}".format(h, H))
+        print("iteration: {} / {}".format(h, H))
         multisets = []
         for x, g in enumerate(graphs):
             for i in range(g.n):
@@ -53,6 +52,7 @@ def WLKernel(graphs, H):
             graphs[multiset.graphIndex].l[h][multiset.v] = newLabel
             kernel[multiset.graphIndex, newLabel] += 1
 
+        print("iteration: {} / {} ended!".format(h, H))
         yield kernel[:, np.any(kernel != 0, axis=0)]
 
 if __name__ == '__main__':
